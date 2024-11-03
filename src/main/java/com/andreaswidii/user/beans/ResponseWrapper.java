@@ -28,6 +28,13 @@ public class ResponseWrapper <T> {
         return this;
     }
 
+    public ResponseWrapper<T> fail(T t, String message) {
+        this.message = message;
+        this.data = t;
+
+        return this;
+    }
+
     public String getMessage() {
         return message;
     }

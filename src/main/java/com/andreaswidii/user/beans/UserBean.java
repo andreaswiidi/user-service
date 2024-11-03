@@ -10,7 +10,6 @@ public class UserBean implements Serializable {
     private String phoneNumber;
     private String email;
     private String username;
-    private String password;
     private Integer loginAttempt;
     private boolean isLocked;
     private Instant createdDate = Instant.now();
@@ -46,14 +45,6 @@ public class UserBean implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Integer getLoginAttempt() {
