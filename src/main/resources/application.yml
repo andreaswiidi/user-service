@@ -1,14 +1,31 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /user
 spring:
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/microservices
-    username: root
-    password: 123456
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:user}
+    username: ${DB_USER:root}
+    password: ${DB_PWD:123456}
     driver-class-name: org.postgresql.Driver
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://localhost:8081/auth/api/jwk
+      csrf:
+        enabled: false
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-
+services:
+  auth:
+    domain: http://localhost:8081/auth
+    get-jwt: /api/get-jwt
 logging:
   level:
     com.andreaswidii.user : DEBUG
+    org.springframework.security.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web.client: DEBUG

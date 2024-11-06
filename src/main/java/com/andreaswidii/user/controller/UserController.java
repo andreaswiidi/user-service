@@ -1,16 +1,16 @@
 package com.andreaswidii.user.controller;
 
-import com.andreaswidii.user.beans.*;
+import com.andreaswidii.user.beans.ResponseWrapper;
+import com.andreaswidii.user.beans.UserBean;
+import com.andreaswidii.user.exception.BadRequestException;
 import com.andreaswidii.user.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.andreaswidii.user.util.JWTUtil;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/open/user")
+@RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
 
@@ -18,18 +18,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseWrapper<RegisterResponse> registerUser(@RequestBody @Valid RegisterReq request)
-            throws JsonProcessingException {
-        userService.isUserExist(request);
-        return new ResponseWrapper<RegisterResponse>()
-                .success(userService.registerUser(request));
-
-    }
-
-    @PostMapping("/login")
-    public ResponseWrapper<UserBean>LoginUser(@RequestBody LoginReq request){
+    @GetMapping
+    public ResponseWrapper<UserBean> getUser(){
+        Long custId = JWTUtil.getUserId()
+                .orElseThrow(() -> new BadRequestException("Not Valid Cust ID"));
         return new ResponseWrapper<UserBean>()
-                .success(userService.loginUser(request));
+                .success(userService.getUserId(custId));
     }
 }

@@ -76,6 +76,21 @@ public class UserService {
         }
     }
 
+    public UserBean getUserId(Long userId){
+        Optional<Users> dataUser = userRepository.findById(userId);
+        if (dataUser.isEmpty()){
+            throw new RuntimeException("not found");
+        }
+        UserBean result = new UserBean();
+        result.setId(dataUser.get().getId());
+        result.setEmail(dataUser.get().getEmail());
+        result.setUsername(dataUser.get().getUsername());
+        result.setPhoneNumber(dataUser.get().getPhoneNumber());
+        result.setCreatedDate(dataUser.get().getCreatedDate());
+        result.setUpdatedDate(dataUser.get().getUpdatedDate());
+        return result;
+    }
+
     public void isUserExist(RegisterReq req){
         Optional<Users> existingUser = userRepository.findByEmailOrUsernameOrPhoneNumber(req.getEmail(), req.getUsername(), req.getPhoneNumber());
 
